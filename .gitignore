@@ -1,0 +1,5 @@
+.vscode
+.venv
+.venv3
+accounts.txt
+certs/*
