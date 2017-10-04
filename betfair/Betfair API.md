@@ -8,12 +8,13 @@
 ## Getting development keys
 Follow guide: https://developer.betfair.com/get-started/#exchange-api
 Application Name chosen in api demo: viktorgetrich
-Delay key: 6h1UxFPL8M7OCrAV
-Other key: D9aYSuak7ms70u3L
 
 ## Generate public key
 1. Follow guide on `http://docs.developer.betfair.com/docs/display/1smk3cen4v3lu3yomq5qye0ni/Non-Interactive+%28bot%29+login`
 
+## Logging in
+* It seems to be possible to be possible to use single sign on and be authenticated that way. Follow [guide](Generate-public-key).
+* Otherwise the delay key and the session token can be used in the headers if user is already signed in on the betfair normal webpage.
 
 ## Several APIs
 1. Betting API  - Contains navigation, odds retrieval and bet placement operations.
@@ -46,7 +47,7 @@ Other key: D9aYSuak7ms70u3L
 2. Select the bet types that can be used together
 3. Take one set of bets that go together. Use them in the marketfilter
 4. Use ListEvents to find games to play on
-5. Use listMarketCatalogue with the specific eventIds to get marketIds
+5. Use listMarketCatalogue with the specific eventIds to get marketIds. Set maxResults to be higher than 1!
 6. Use listMarketBook to get the odds of all marketIds that were received
 7. Check all odds for every bet type for a specific game (what endpoint???), see if there is an arbitrage possibility.
 8. Do this by combining with competitors of betfair also.
@@ -54,7 +55,6 @@ Other key: D9aYSuak7ms70u3L
 ## Operations (Accounts API)
 * createDeveloperAppKeys
 * getDeveloperAppKeys
-
 
 ### Questions
 * How do we get a specific bet/odds for a game? listEvents only say the game, not the bet type or the odds!
