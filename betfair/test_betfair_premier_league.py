@@ -91,7 +91,7 @@ def getMarketCatalogue(eventTypeID, marketTypeCodes, maxResults, competitionId):
         now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
         market_catalogue_req = '{"jsonrpc": "2.0", "method": "SportsAPING/v1.0/listMarketCatalogue", "params": {"filter":{"eventTypeIds":["' + eventTypeID + '"],"competitionIds":["' + str(competitionId) + '"],"marketTypeCodes":["MATCH_ODDS"],'\
                                                                                                                                                              '"marketStartTime":{"from":"' + now + '"}},"sort":"FIRST_TO_START","maxResults":"' + str(maxResults) + '","marketProjection":["RUNNER_METADATA"]}, "id": 1}'
-        
+
         """
         print  market_catalogue_req
         """
