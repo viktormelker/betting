@@ -20,14 +20,14 @@ Application Name chosen in api demo: viktorgetrich
 1. Betting API  - Contains navigation, odds retrieval and bet placement operations.
 2. Accounts API - Contains account related operations such as the ability to retrieve your available account balance as well as Vendor Services operations that are available to licensed Software Vendors
 3. Heartbeat API - allows you to automatically cancel unmatched bets in the event of your API client/s losing connectivity.
-4.Race Status API - allows you to establish the status of a horse race or greyhound market both prior to and after the start of the race. 
+4.Race Status API - allows you to establish the status of a horse race or greyhound market both prior to and after the start of the race.
 5.Exchange Stream API - allows you to subscribe to market changes (both price and definitions) and orders.
 
 
 ## Operations (Betting api)
 * listEventTypes - List different sports etc to bet on.
 * listCompetitions - Champions League, US open etc
-* listTimeRanges - Date intervals whith bets 
+* listTimeRanges - Date intervals whith bets
 * listEvents - specific games. Some team names are abbreviations! Has start date and time
 * listMarketTypes - Type of bets
 * listCountries - Countries
@@ -35,12 +35,12 @@ Application Name chosen in api demo: viktorgetrich
 * listMarketCatalogue - Get hold of the marketId of specific events
 * listMarketBook - Probably returns price data etc. Call using market id returned by listMarketCatalogue
 * listRunnerBook - ???
-* placeOrders - 
-* updateOrders - 
-* replaceOrders - 
-* listCurrentOrders - 
+* placeOrders -
+* updateOrders -
+* replaceOrders -
+* listCurrentOrders -
 * listClearedOrders -
-* listMarketProfitAndLoss - 
+* listMarketProfitAndLoss -
 
 ### Possible approach:
 1. Use listMarketType to see which types of bets are available.
@@ -74,3 +74,7 @@ The following requirements must be fullfilled in order for our betting strategy 
 4. It must be possible to see account balance, (placed odds and when they are due).
 5. Login
 
+# Good references
+* http://docs.developer.betfair.com/docs/display/1smk3cen4v3lu3yomq5qye0ni/Betting+Type+Definitions - defines what fields are required etc.
+## Error codes
+http://docs.developer.betfair.com/docs/display/1smk3cen4v3lu3yomq5qye0ni/Common+Error+Codes
