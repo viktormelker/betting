@@ -8,12 +8,13 @@ from betfair.constants import MarketBettingType
 
 
 
-def print_market_data(market_id, runners):
+def print_market_data(market_id, catalog_runners):
     print(f'got data for game with marketid {market_id}')
 
     response = conn.crap_get_events(market_id)
     event_data = response.json()
     event = Event(**event_data[0]['event'])
+    print('***** NEW GAME *****')
     print(f'Game has event_id: {event.id}, name: {event.name} and time: {event.open_date}')
 
     response = conn.get_market_book(market_id)
@@ -22,7 +23,7 @@ def print_market_data(market_id, runners):
     #import ipdb; ipdb.set_trace()
 
     runner_catalog_dict = {}
-    all_runners = runners
+    all_runners = catalog_runners
     for runner in all_runners:
         runner_model = RunnerCatalog(**runner)
         runner_catalog_dict[runner_model.selection_id] = runner_model.serialize()
@@ -35,9 +36,14 @@ def print_market_data(market_id, runners):
         runner_dict[runner_model.selection_id] = runner_model.serialize()
 
     for key, value in runner_catalog_dict.items():
-        print('Bet on %s has odds %s' % (value['runnerName'], runner_dict[key]['lastPriceTraded']))
+        print(
+            'Bet on %s with handicap %s has odds %s' % (value['runnerName'],
+            value['handicap'], runner_dict[key]['lastPriceTraded'])
+        )
         #print(runner_dict[key])
         #print(value)
+
+    print('***** THE END *****')
 
 
 def get_premier_league_data():
