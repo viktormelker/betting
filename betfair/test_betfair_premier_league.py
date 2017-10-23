@@ -4,6 +4,7 @@ import urllib2
 import json
 import datetime
 import sys
+import requests
 
 
 def callAping(jsonrpc_req):
@@ -43,6 +44,28 @@ def getEventTypes():
         exit()
 
 
+def getEvent(marketId):
+    """
+    calling getEventTypes operation
+    """
+    now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+    event_req = '{"jsonrpc": "2.0", "method": "SportsAPING/v1.0/listEvents", "params": {"filter":{"marketIds":["' + str(marketId) + '"], "marketStartTime":{"from":"' + now + '"}},"sort":"FIRST_TO_START", "maxResults":"1",}, "id": 1}'
+    event_req = '{"jsonrpc": "2.0", "method": "SportsAPING/v1.0/listEvents", "params": {"filter":{"marketIds":["' + str(marketId) + '"]},"sort":"FIRST_TO_START", "maxResults":"1",}, "id": 1}'
+    print 'Calling listEvents to get event Type ID'
+    eventResponse = callAping(event_req)
+    eventLoads = json.loads(eventResponse)
+    """
+    print eventLoads
+    """
+
+    try:
+        eventResults = eventLoads['result']
+        return eventResults
+    except:
+        print 'Exception from API-NG' + str(eventLoads['error'])
+        exit()    
+
+
 def getEventTypeIDForEventTypeName(eventTypesResult, requestedEventTypeName):
     """
     Extraction eventypeId for eventTypeName from evetypeResults
@@ -56,30 +79,6 @@ def getEventTypeIDForEventTypeName(eventTypesResult, requestedEventTypeName):
         print 'Oops there is an issue with the input'
         exit()
 
-
-def getMarketCatalogueForNextGBWin(eventTypeID):
-    """
-    Calling marketCatalouge to get marketDetails
-    """
-    if (eventTypeID is not None):
-        print 'Calling listMarketCatalouge Operation to get MarketID and selectionId'
-        now = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
-        market_catalogue_req = '{"jsonrpc": "2.0", "method": "SportsAPING/v1.0/listMarketCatalogue", "params": {"filter":{"eventTypeIds":["' + eventTypeID + '"],"marketCountries":["GB"],"marketTypeCodes":["WIN"],'\
-                                                                                                                                                             '"marketStartTime":{"from":"' + now + '"}},"sort":"FIRST_TO_START","maxResults":"1","marketProjection":["RUNNER_METADATA"]}, "id": 1}'
-        """
-        print  market_catalogue_req
-        """
-        market_catalogue_response = callAping(market_catalogue_req)
-        """
-        print market_catalogue_response
-        """
-        market_catalouge_loads = json.loads(market_catalogue_response)
-        try:
-            market_catalouge_results = market_catalouge_loads['result']
-            return market_catalouge_results
-        except:
-            print  'Exception from API-NG' + str(market_catalouge_results['error'])
-            exit()
 
 
 def getMarketCatalogue(eventTypeID, marketTypeCodes, maxResults, competitionId):
@@ -107,16 +106,23 @@ def getMarketCatalogue(eventTypeID, marketTypeCodes, maxResults, competitionId):
             print  'Exception from API-NG' + str(market_catalouge_results['error'])
             exit()
 
-def getMarketId(marketCatalogueResult):
-    if(marketCatalogueResult is not None):
-        for market in marketCatalogueResult:
-            return market['marketId']
+
+def getMarketIds(marketCatalogueResults):
+    marketIds = []
+    if(marketCatalogueResults is not None):
+        for market in marketCatalogueResults:
+            marketIds.append(market['marketId'])
+    return marketIds
 
 
-def getSelectionId(marketCatalogueResult):
-    if(marketCatalogueResult is not None):
-        for market in marketCatalogueResult:
-            return market['runners'][0]['selectionId']
+def getSelectionIds(marketCatalogueResults):
+    selectionIds = []
+    for marketCatalogueResult in marketCatalogueResults:
+        if(marketCatalogueResult is not None):
+            runners = marketCatalogueResult['runners']
+            for runner in runners:
+                selectionIds.append(runner['selectionId'])
+    return selectionIds
 
 
 def getMarketBookBestOffers(marketId):
@@ -182,7 +188,6 @@ url = "https://api.betfair.com/exchange/betting/json-rpc/v1"
 """
 headers = { 'X-Application' : 'xxxxxx', 'X-Authentication' : 'xxxxx' ,'content-type' : 'application/json' }
 """
-import ipdb; ipdb.set_trace()
 args = len(sys.argv)
 
 if (args < 3):
@@ -196,12 +201,21 @@ else:
 
 headers = {'X-Application': appKey, 'X-Authentication': sessionToken, 'content-type': 'application/json'}
 
+endpoint = "https://api.betfair.com/exchange/betting/rest/v1.0/"
+
+import ipdb; ipdb.set_trace()
+json_req='{"filter":{ }}'
+url = endpoint + "listEvents"
+response = requests.post(url, data=json_req, headers=headers)
+
+
 eventTypesResult = getEventTypes()
 soccerEventTypeID = getEventTypeIDForEventTypeName(eventTypesResult, 'Soccer')
 
 print 'Eventype Id for Soccer is :' + str(soccerEventTypeID)
 
 # get premier league id by using the listCompetition endpoint
+# Use west ham vs brighton 20th of october
 premierLeagueId = 10932509
 
 interesting_market_types = [
@@ -218,15 +232,17 @@ interesting_market_types = [
 start_date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
 
 # Use market catalogue to get markets for premier league with specific betting types and dates.
+import ipdb; ipdb.set_trace()
 
-marketCatalogueResult = getMarketCatalogue(soccerEventTypeID, interesting_market_types, 10, premierLeagueId)
-marketid = getMarketId(marketCatalogueResult)
-runnerId = getSelectionId(marketCatalogueResult)
+marketCatalogueResults = getMarketCatalogue(soccerEventTypeID, interesting_market_types, 2, premierLeagueId)
+marketIds = getMarketIds(marketCatalogueResults)
+runnerIds = getSelectionIds(marketCatalogueResults)
 """
 print marketid
 print runnerId
 """
-market_book_result = getMarketBookBestOffers(marketid)
-#printPriceInfo(market_book_result)
+events = getEvent(marketIds[0])
+market_book_result = getMarketBookBestOffers(marketIds[0])
+printPriceInfo(market_book_result)
 
 #placeFailingBet(marketid, runnerId)
