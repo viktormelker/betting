@@ -63,7 +63,7 @@ def getEvent(marketId):
         return eventResults
     except:
         print 'Exception from API-NG' + str(eventLoads['error'])
-        exit()    
+        exit()
 
 
 def getEventTypeIDForEventTypeName(eventTypesResult, requestedEventTypeName):
@@ -200,14 +200,6 @@ else:
     sessionToken = sys.argv[2]
 
 headers = {'X-Application': appKey, 'X-Authentication': sessionToken, 'content-type': 'application/json'}
-
-endpoint = "https://api.betfair.com/exchange/betting/rest/v1.0/"
-
-import ipdb; ipdb.set_trace()
-json_req='{"filter":{ }}'
-url = endpoint + "listEvents"
-response = requests.post(url, data=json_req, headers=headers)
-
 
 eventTypesResult = getEventTypes()
 soccerEventTypeID = getEventTypeIDForEventTypeName(eventTypesResult, 'Soccer')
