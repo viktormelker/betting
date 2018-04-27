@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
+
+"""
+Python 2
+"""
 
 import urllib2
 import json

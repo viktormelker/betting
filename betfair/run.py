@@ -1,3 +1,9 @@
+
+"""
+Python 3
+This is an attempt to use betfair.py (https://github.com/jmcarp/betfair.py) to
+"""
+
 from app.models.rest_classes import BetfairConnection, BetfairFilter, MyMarketCatalogue
 from betfair.utils import process_result
 from betfair.models import (
