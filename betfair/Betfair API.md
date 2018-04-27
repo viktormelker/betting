@@ -14,7 +14,8 @@ Application Name chosen in api demo: viktorgetrich
 
 ## Logging in
 * It seems to be possible to be possible to use single sign on and be authenticated that way. Follow [guide](Generate-public-key).
-* Otherwise the delay key and the session token can be used in the headers if user is already signed in on the betfair normal webpage.
+* After this the delay key and the session token can be used in the headers if user is already signed in on the betfair normal webpage. This probably requires the
+certificate files.
 
 ## Several APIs
 1. Betting API  - Contains navigation, odds retrieval and bet placement operations.
