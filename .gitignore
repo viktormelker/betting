@@ -4,3 +4,4 @@
 betfair/accounts.txt
 betfair/certs/*
 betfair/keys.txt
+betfair/secrets.py
