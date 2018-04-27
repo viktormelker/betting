@@ -5,11 +5,8 @@ Python 2
 
 import requests
 
-### Fill these out! ###
-username = ''
-password = ''
-application_key = ''
-#######################
+from secrets import (
+    username, password, delayed_application_key as application_key)
 
 payload = 'username={}&password={}'.format(username, password)
 headers = {
@@ -25,7 +22,7 @@ response = requests.post(
 
 if response.status_code == 200:
     response_json = response.json()
-    print response_json['loginStatus']
-    print response_json['sessionToken']
+    print 'Login status: ' + response_json['loginStatus']
+    print 'session_token: ' + response_json['sessionToken']
 else:
     print "Request failed."
