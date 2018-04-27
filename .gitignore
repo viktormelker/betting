@@ -3,3 +3,4 @@
 .venv3
 betfair/accounts.txt
 betfair/certs/*
+betfair/keys.txt
